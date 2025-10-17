@@ -11,7 +11,7 @@ export const mockAgents: Agent[] = [
         percentage: 97.5,
       },
       {
-        symbol: '$BC',
+        symbol: '$BTC',
         percentage: 2.5,
       },
     ],
@@ -29,7 +29,11 @@ export const mockAgents: Agent[] = [
       },
       {
         symbol: '$ETH',
-        percentage: 53.5,
+        percentage: 29.8,
+      },
+      {
+        symbol: 'BNB',
+        percentage: 22.7,
       },
     ],
     change24h: '12.60%',

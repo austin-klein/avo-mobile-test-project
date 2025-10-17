@@ -1,7 +1,10 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Agent } from '@/types/types';
+import { bottts, identicon } from '@dicebear/collection';
+import { createAvatar } from '@dicebear/core';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 
 const renderProgressBar = (percentage: number, maxWidth: number = 80) => {
   const filledWidth = (percentage / 100) * maxWidth;
@@ -26,7 +29,9 @@ export const renderAgentCard = (agent: Agent) => {
       {/* Header Section */}
       <View style={styles.headerSection}>
         <View style={styles.avatarContainer}>
-          <View style={styles.avatar} />
+          <View style={{ flex: 1 }}>
+            <SvgXml xml={createAvatar(bottts, { seed: agent.name }).toString()} />
+          </View>
         </View>
         <View style={styles.headerInfo}>
           <ThemedText type='defaultSemiBold' style={styles.agentName}>
@@ -58,12 +63,9 @@ export const renderAgentCard = (agent: Agent) => {
         {agent.topPositions.map((position, index) => (
           <View key={index} style={styles.positionRow}>
             <View style={styles.symbolContainer}>
-              <View
-                style={[
-                  styles.symbolIcon,
-                  { backgroundColor: index === 0 ? '#4D9DFF' : '#00C896' },
-                ]}
-              />
+              <View style={[styles.symbolIcon]}>
+                <SvgXml xml={createAvatar(identicon, { seed: position.symbol }).toString()} />
+              </View>
               <ThemedText style={styles.symbolText}>{position.symbol}</ThemedText>
             </View>
             <View style={styles.positionStats}>
@@ -95,156 +97,170 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: 16,
     marginVertical: 12,
-    borderRadius: 20,
-    padding: 16,
+    borderRadius: 24,
+    padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   headerSection: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-    gap: 12,
+    alignItems: 'flex-start',
+    marginBottom: 20,
+    gap: 16,
   },
   avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 20,
+    width: 80,
+    height: 80,
+    borderRadius: 16,
     overflow: 'hidden',
-  },
-  avatar: {
-    flex: 1,
-    backgroundColor: '#4FD167',
+    flexShrink: 0,
   },
   headerInfo: {
     flex: 1,
-    gap: 8,
+    gap: 10,
+    justifyContent: 'center',
   },
   agentName: {
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 28,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   roleBadge: {
-    backgroundColor: '#2D1B69',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
+    backgroundColor: '#3D2680',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 14,
     alignSelf: 'flex-start',
   },
   roleText: {
-    color: '#8B9FD9',
-    fontSize: 12,
+    color: '#9BA3D9',
+    fontSize: 13,
     fontWeight: '500',
   },
   buttonContainer: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16,
+    marginBottom: 20,
   },
   buyButton: {
     flex: 1,
-    backgroundColor: '#4D9DFF',
-    paddingVertical: 16,
-    borderRadius: 12,
+    backgroundColor: '#4D7CFF',
+    paddingVertical: 15,
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(157, 77, 255, 0.3)',
   },
   buyButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
+    letterSpacing: 0.3,
   },
   secondaryButton: {
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 12,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
   secondaryButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
   },
   divider: {
     height: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    marginVertical: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    marginVertical: 20,
   },
   positionsSection: {
-    marginBottom: 16,
+    marginBottom: 24,
   },
   positionsTitle: {
-    color: '#999',
-    fontSize: 14,
+    color: '#888',
+    fontSize: 13,
     fontWeight: '600',
-    marginBottom: 12,
+    marginBottom: 16,
+    letterSpacing: 0.5,
   },
   positionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 14,
   },
   symbolContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
+    flex: 0.4,
   },
   symbolIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    flexShrink: 0,
   },
   symbolText: {
     color: '#fff',
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: '600',
   },
   positionStats: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+    flex: 0.6,
   },
   percentageContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
+    flex: 1,
   },
   progressBarContainer: {
-    height: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 3,
+    height: 5,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 2.5,
     overflow: 'hidden',
+    flex: 1,
   },
   progressBarFill: {
     height: '100%',
-    borderRadius: 3,
+    borderRadius: 2.5,
   },
   percentageText: {
     color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
-    minWidth: 45,
+    fontSize: 13,
+    fontWeight: '700',
+    minWidth: 50,
     textAlign: 'right',
   },
   statsSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 12,
+    marginTop: 24,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.08)',
   },
   statItem: {
     alignItems: 'center',
+    gap: 8,
   },
   timeLabel: {
-    color: '#999',
+    color: '#888',
     fontSize: 12,
-    marginBottom: 4,
+    fontWeight: '500',
   },
   changeValue: {
-    color: '#00C896',
-    fontSize: 20,
+    color: '#00E5A0',
+    fontSize: 22,
     fontWeight: '700',
+    letterSpacing: -0.5,
   },
 });
