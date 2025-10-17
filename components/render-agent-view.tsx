@@ -95,7 +95,6 @@ export const renderAgentCard = (agent: Agent) => {
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 16,
     marginVertical: 12,
     borderRadius: 24,
     padding: 20,
