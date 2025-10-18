@@ -29,15 +29,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='agents'
-        options={{
-          title: 'Agents',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name='robotic.vacuum.fill' color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name='profile'
         options={{
           title: 'Profile',

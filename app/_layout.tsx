@@ -37,7 +37,6 @@ export default function RootLayout() {
               screenOptions={{
                 headerShown: false,
                 contentStyle: { backgroundColor: 'transparent' },
-                sceneContainerStyle: { backgroundColor: 'transparent' },
               }}>
               <Stack.Screen name='(tabs)' />
               <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
