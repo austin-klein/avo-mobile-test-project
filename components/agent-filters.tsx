@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { DropdownButton } from './ui/DropdownButton';
 
 interface FilterProps {
   onTypeChange: (type: string) => void;
@@ -10,9 +11,9 @@ interface FilterProps {
   onSearchChange: (search: string) => void;
 }
 
-const TYPE_OPTIONS = ['Wallets', 'Traders', 'Funds'];
-const PROTECTION_OPTIONS = ['Degen', 'Standard', 'Conservative'];
-const SORT_OPTIONS = ['24h', '7d', '30d'];
+const TYPE_OPTIONS = ['Wallets', 'Indexes', 'Reasoning Agents'];
+const PROTECTION_OPTIONS = ['Degen', 'Moderate', 'Guarded'];
+const SORT_OPTIONS = ['24h', '7d', '1M'];
 
 export function AgentFilters({
   onTypeChange,
@@ -49,26 +50,6 @@ export function AgentFilters({
     setSearchText(text);
     onSearchChange(text);
   };
-
-  const DropdownButton = ({
-    label,
-    value,
-    onPress,
-    id,
-  }: {
-    label: string;
-    value: string;
-    onPress: () => void;
-    id: string;
-  }) => (
-    <Pressable onPress={onPress} style={styles.dropdownButton}>
-      <View style={styles.dropdownContent}>
-        <ThemedText style={styles.dropdownLabel}>{label}: </ThemedText>
-        <ThemedText style={styles.dropdownValue}>{value}</ThemedText>
-      </View>
-      <ThemedText style={styles.dropdownArrow}>›</ThemedText>
-    </Pressable>
-  );
 
   const DropdownMenu = ({
     options,
@@ -129,7 +110,6 @@ export function AgentFilters({
             label='Type'
             value={selectedType}
             onPress={() => setActiveDropdown(activeDropdown === 'type' ? null : 'type')}
-            id='type'
           />
           <DropdownMenu
             id='type'
@@ -143,7 +123,6 @@ export function AgentFilters({
             label='Protection level'
             value={selectedProtection}
             onPress={() => setActiveDropdown(activeDropdown === 'protection' ? null : 'protection')}
-            id='protection'
           />
           <DropdownMenu
             id='protection'
@@ -157,7 +136,6 @@ export function AgentFilters({
             label='Sort'
             value={selectedSort}
             onPress={() => setActiveDropdown(activeDropdown === 'sort' ? null : 'sort')}
-            id='sort'
           />
           <DropdownMenu
             id='sort'
@@ -225,35 +203,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
-  },
-  dropdownButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  dropdownContent: {
-    flexDirection: 'row',
-  },
-  dropdownLabel: {
-    color: '#888',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-  dropdownValue: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  dropdownArrow: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '600',
   },
   dropdownOverlay: {
     flex: 1,

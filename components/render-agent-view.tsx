@@ -6,7 +6,14 @@ import { createAvatar } from '@dicebear/core';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
-const renderProgressBar = (percentage: number, maxWidth: number = 80) => {
+// Constants for dimensions
+const AVATAR_SIZE = 80;
+const AVATAR_BORDER_RADIUS = 16;
+const SYMBOL_ICON_SIZE = 32;
+const SYMBOL_ICON_BORDER_RADIUS = 8;
+const PROGRESS_BAR_MAX_WIDTH = 80;
+
+const renderProgressBar = (percentage: number, maxWidth: number = PROGRESS_BAR_MAX_WIDTH) => {
   const filledWidth = (percentage / 100) * maxWidth;
   return (
     <View style={[styles.progressBarContainer, { width: maxWidth }]}>
@@ -109,9 +116,9 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   avatarContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 16,
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    borderRadius: AVATAR_BORDER_RADIUS,
     overflow: 'hidden',
     flexShrink: 0,
   },
@@ -199,9 +206,9 @@ const styles = StyleSheet.create({
     flex: 0.4,
   },
   symbolIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
+    width: SYMBOL_ICON_SIZE,
+    height: SYMBOL_ICON_SIZE,
+    borderRadius: SYMBOL_ICON_BORDER_RADIUS,
     flexShrink: 0,
   },
   symbolText: {
