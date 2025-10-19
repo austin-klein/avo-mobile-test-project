@@ -1,6 +1,6 @@
+import { AgentCard } from '@/components/agent-card';
 import { AgentFilters } from '@/components/agent-filters';
 import GifScrollView from '@/components/gif-scroll-view';
-import { renderAgentCard } from '@/components/render-agent-view';
 import { mockAgents } from '@/mocks/mocks';
 import { useMemo, useState } from 'react';
 import { FlatList } from 'react-native';
@@ -53,7 +53,7 @@ export default function TabOneScreen() {
 
       <FlatList
         data={filteredAgents}
-        renderItem={({ item }) => renderAgentCard(item)}
+        renderItem={({ item }) => <AgentCard agent={item} />}
         keyExtractor={(item) => item.id}
         scrollEnabled={false}
       />

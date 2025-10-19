@@ -39,6 +39,7 @@ export default function RootLayout() {
                 contentStyle: { backgroundColor: 'transparent' },
               }}>
               <Stack.Screen name='(tabs)' />
+              <Stack.Screen name='agent-detail' options={{ presentation: 'card' }} />
               <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
             </Stack>
           </View>

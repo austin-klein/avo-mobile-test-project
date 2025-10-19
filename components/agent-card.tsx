@@ -3,6 +3,7 @@ import { ThemedView } from '@/components/themed-view';
 import { Agent } from '@/types/types';
 import { bottts, identicon } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
+import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
@@ -30,7 +31,16 @@ const renderProgressBar = (percentage: number, maxWidth: number = PROGRESS_BAR_M
   );
 };
 
-export const renderAgentCard = (agent: Agent) => {
+export const AgentCard = ({ agent }: { agent: Agent }) => {
+  const router = useRouter();
+
+  const handleDetailsPress = () => {
+    router.push({
+      pathname: '/agent-detail',
+      params: { agentId: agent.id },
+    });
+  };
+
   return (
     <ThemedView style={styles.card}>
       {/* Header Section */}
@@ -55,7 +65,7 @@ export const renderAgentCard = (agent: Agent) => {
         <Pressable style={styles.buyButton}>
           <ThemedText style={styles.buyButtonText}>Buy ›</ThemedText>
         </Pressable>
-        <Pressable style={styles.secondaryButton}>
+        <Pressable style={styles.secondaryButton} onPress={handleDetailsPress}>
           <ThemedText style={styles.secondaryButtonText}>›</ThemedText>
         </Pressable>
       </View>
