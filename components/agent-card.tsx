@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 8,
     marginBottom: 20,
   },
   buyButton: {
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   secondaryButton: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.15)',
     borderRadius: 16,
