@@ -13,20 +13,22 @@ interface TradingModalProps {
   onClose: () => void;
 }
 
-// Constants for dimensions
+// Constants for dimensions and configuration
 const SYMBOL_ICON_SIZE = 50;
 const SYMBOL_ICON_BORDER_RADIUS = 8;
+const TOKENS = ['SOL', 'USDC', 'USDT'];
+const DEFAULT_AGENT_BALANCE = 0;
+const DEFAULT_TAKE_PROFIT = '25';
+const DEFAULT_STOP_LOSS = '15';
+const SOL_USD_RATE = 195;
 
 export const TradingModal = ({ visible, agent, onClose }: TradingModalProps) => {
   const [amount, setAmount] = useState('0');
   const [selectedToken, setSelectedToken] = useState('SOL');
   const [showTokenDropdown, setShowTokenDropdown] = useState(false);
   const [showSLTP, setShowSLTP] = useState(false);
-  const [takeProfit, setTakeProfit] = useState('25');
-  const [stopLoss, setStopLoss] = useState('15');
-
-  const tokens = ['SOL', 'USDC', 'USDT'];
-  const agentBalance = 0;
+  const [takeProfit, setTakeProfit] = useState(DEFAULT_TAKE_PROFIT);
+  const [stopLoss, setStopLoss] = useState(DEFAULT_STOP_LOSS);
 
   const handleTokenSelect = (token: string) => {
     setSelectedToken(token);
@@ -91,7 +93,7 @@ export const TradingModal = ({ visible, agent, onClose }: TradingModalProps) => 
               {/* Token Dropdown */}
               {showTokenDropdown && (
                 <View style={styles.dropdownMenu}>
-                  {tokens.map((token) => (
+                  {TOKENS.map((token) => (
                     <Pressable
                       key={token}
                       style={[
@@ -114,10 +116,10 @@ export const TradingModal = ({ visible, agent, onClose }: TradingModalProps) => 
               {/* Price and Balance Info */}
               <View style={styles.infoRow}>
                 <ThemedText style={styles.infoLabel}>
-                  ${amount ? (parseFloat(amount) * 195).toFixed(2) : '0.00'} USD
+                  ${amount ? (parseFloat(amount) * SOL_USD_RATE).toFixed(2) : '0.00'} USD
                 </ThemedText>
                 <ThemedText style={styles.infoLabel}>
-                  Balance: {agentBalance} {selectedToken}
+                  Balance: {DEFAULT_AGENT_BALANCE} {selectedToken}
                 </ThemedText>
               </View>
 
@@ -138,7 +140,7 @@ export const TradingModal = ({ visible, agent, onClose }: TradingModalProps) => 
                       <ThemedText style={styles.slTPLabel}>📈 Take Profit %</ThemedText>
                       <TextInput
                         style={styles.slTPInput}
-                        placeholder='25'
+                        placeholder={DEFAULT_TAKE_PROFIT}
                         placeholderTextColor='#666666ff'
                         value={takeProfit}
                         onChangeText={setTakeProfit}
@@ -152,7 +154,7 @@ export const TradingModal = ({ visible, agent, onClose }: TradingModalProps) => 
                       <ThemedText style={styles.slTPLabel}>📉 Stop Loss %</ThemedText>
                       <TextInput
                         style={styles.slTPInput}
-                        placeholder='15'
+                        placeholder={DEFAULT_STOP_LOSS}
                         placeholderTextColor='#666666ff'
                         value={stopLoss}
                         onChangeText={setStopLoss}

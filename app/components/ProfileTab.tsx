@@ -317,13 +317,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
-    marginBottom: 0,
   },
   settingValue: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
-    marginBottom: 0,
   },
   settingRequired: {
     color: '#888',

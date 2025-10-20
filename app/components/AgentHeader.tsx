@@ -137,10 +137,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 0,
-    paddingBottom: 0,
-    borderBottomWidth: 0,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
   },
   addressLabel: {
     color: '#888',
