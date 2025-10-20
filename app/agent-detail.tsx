@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { mockAgents } from '@/mocks/mocks';
+import { mockAgentLogs, mockAgents } from '@/mocks/mocks';
 import { bottts } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -251,9 +251,50 @@ export default function AgentDetailScreen() {
           {/* Agent Logs Tab */}
           {activeTab === 'logs' && (
             <View style={styles.logsContent}>
-              <ThemedText style={styles.logsPlaceholder}>
-                Agent activity logs coming soon...
-              </ThemedText>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={true}
+                scrollEventThrottle={16}
+                style={styles.logsScrollContainer}>
+                <View style={styles.logsListContainer}>
+                  {mockAgentLogs.map((log) => (
+                    <View key={log.id} style={styles.logEntry}>
+                      <View style={styles.logLeftHalf}>
+                        <ThemedText style={styles.logTimestamp}>{log.timestamp}</ThemedText>
+                        <View
+                          style={[
+                            styles.logIcon,
+                            {
+                              backgroundColor:
+                                log.type === 'SUCCESS'
+                                  ? 'rgba(0, 229, 160, 0.15)'
+                                  : 'rgba(77, 124, 255, 0.15)',
+                            },
+                          ]}>
+                          <ThemedText
+                            style={[
+                              styles.logIconText,
+                              {
+                                color: log.type === 'SUCCESS' ? '#00E5A0' : '#4D9DFF',
+                              },
+                            ]}>
+                            {log.type === 'SUCCESS' ? '✓' : 'ⓘ'}
+                          </ThemedText>
+                        </View>
+                        <ThemedText style={styles.logType}>[{log.type}]</ThemedText>
+                      </View>
+                      <View style={styles.logRightHalf}>
+                        <ThemedText style={styles.logMessage}>{log.message}</ThemedText>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </ScrollView>
+              <View style={styles.logsFooter}>
+                <ThemedText style={styles.logsFooterText}>
+                  Displaying last 100 log entries.
+                </ThemedText>
+              </View>
             </View>
           )}
         </View>
@@ -430,10 +471,77 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   logsContent: {
-    paddingHorizontal: 20,
-    paddingVertical: 60,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  logsScrollContainer: {
+    marginHorizontal: -16,
+    paddingHorizontal: 16,
+    flex: 1,
+  },
+  logsListContainer: {
+    gap: 8,
+    paddingRight: 16,
+  },
+  logEntry: {
+    flexDirection: 'row',
+    gap: 85,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    alignItems: 'flex-start',
+  },
+  logLeftHalf: {
+    width: 140,
+    flexDirection: 'row',
+    gap: 8,
     alignItems: 'center',
+    flexShrink: 0,
+  },
+  logTimestamp: {
+    color: '#666',
+    fontSize: 11,
+    fontWeight: '400',
+    width: 120,
+    flexShrink: 0,
+  },
+  logIcon: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
     justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  logIconText: {
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  logType: {
+    fontSize: 11,
+    fontWeight: '600',
+    width: 60,
+    flexShrink: 0,
+  },
+  logRightHalf: {
+    flex: 1,
+    paddingLeft: 4,
+  },
+  logMessage: {
+    color: '#aaa',
+    fontSize: 11,
+    fontWeight: '400',
+    flexWrap: 'nowrap',
+  },
+  logsFooter: {
+    marginTop: 20,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  logsFooterText: {
+    color: '#555',
+    fontSize: 12,
+    fontWeight: '400',
   },
   safetySection: {
     marginBottom: 24,
