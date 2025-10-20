@@ -1,9 +1,11 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { TradingModal } from '@/components/trading-modal';
 import { Agent } from '@/types/types';
 import { bottts, identicon } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
@@ -33,6 +35,7 @@ const renderProgressBar = (percentage: number, maxWidth: number = PROGRESS_BAR_M
 
 export const AgentCard = ({ agent }: { agent: Agent }) => {
   const router = useRouter();
+  const [showTradingModal, setShowTradingModal] = useState(false);
 
   const handleDetailsPress = () => {
     router.push({
@@ -41,72 +44,83 @@ export const AgentCard = ({ agent }: { agent: Agent }) => {
     });
   };
 
+  const handleBuyPress = () => {
+    setShowTradingModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowTradingModal(false);
+  };
+
   return (
-    <ThemedView style={styles.card}>
-      {/* Header Section */}
-      <View style={styles.headerSection}>
-        <View style={styles.avatarContainer}>
-          <View style={{ flex: 1 }}>
-            <SvgXml xml={createAvatar(bottts, { seed: agent.name }).toString()} />
+    <>
+      <ThemedView style={styles.card}>
+        {/* Header Section */}
+        <View style={styles.headerSection}>
+          <View style={styles.avatarContainer}>
+            <Pressable style={{ flex: 1 }} onPress={handleDetailsPress}>
+              <SvgXml xml={createAvatar(bottts, { seed: agent.name }).toString()} />
+            </Pressable>
           </View>
-        </View>
-        <View style={styles.headerInfo}>
-          <ThemedText type='defaultSemiBold' style={styles.agentName}>
-            {agent.name}
-          </ThemedText>
-          <View style={styles.roleBadge}>
-            <ThemedText style={styles.roleText}>{agent.role}</ThemedText>
-          </View>
-        </View>
-      </View>
-
-      {/* Action Buttons */}
-      <View style={styles.buttonContainer}>
-        <Pressable style={styles.buyButton}>
-          <ThemedText style={styles.buyButtonText}>Buy ›</ThemedText>
-        </Pressable>
-        <Pressable style={styles.secondaryButton} onPress={handleDetailsPress}>
-          <ThemedText style={styles.secondaryButtonText}>›</ThemedText>
-        </Pressable>
-      </View>
-
-      {/* Divider */}
-      <View style={styles.divider} />
-
-      {/* Top Positions Section */}
-      <View style={styles.positionsSection}>
-        <ThemedText style={styles.positionsTitle}>Top Positions</ThemedText>
-
-        {agent.topPositions.map((position, index) => (
-          <View key={index} style={styles.positionRow}>
-            <View style={styles.symbolContainer}>
-              <View style={[styles.symbolIcon]}>
-                <SvgXml xml={createAvatar(identicon, { seed: position.symbol }).toString()} />
-              </View>
-              <ThemedText style={styles.symbolText}>{position.symbol}</ThemedText>
-            </View>
-            <View style={styles.positionStats}>
-              <View style={styles.percentageContainer}>
-                {renderProgressBar(position.percentage, 80)}
-                <ThemedText style={styles.percentageText}>{position.percentage}%</ThemedText>
-              </View>
+          <View style={styles.headerInfo}>
+            <ThemedText type='defaultSemiBold' style={styles.agentName}>
+              {agent.name}
+            </ThemedText>
+            <View style={styles.roleBadge}>
+              <ThemedText style={styles.roleText}>{agent.role}</ThemedText>
             </View>
           </View>
-        ))}
-      </View>
+        </View>
 
-      {/* Change Stats Section */}
-      <View style={styles.statsSection}>
-        <View style={styles.statItem}>
-          <ThemedText style={styles.timeLabel}>24h</ThemedText>
-          <ThemedText style={styles.changeValue}>{agent.change24h}</ThemedText>
+        {/* Action Buttons */}
+        <View style={styles.buttonContainer}>
+          <Pressable style={styles.buyButton} onPress={handleBuyPress}>
+            <ThemedText style={styles.buyButtonText}>Buy ›</ThemedText>
+          </Pressable>
+          <Pressable style={styles.secondaryButton} onPress={handleDetailsPress}>
+            <ThemedText style={styles.secondaryButtonText}>›</ThemedText>
+          </Pressable>
         </View>
-        <View style={styles.statItem}>
-          <ThemedText style={styles.timeLabel}>7d</ThemedText>
-          <ThemedText style={styles.changeValue}>{agent.change7d}</ThemedText>
+
+        {/* Divider */}
+        <View style={styles.divider} />
+
+        {/* Top Positions Section */}
+        <View style={styles.positionsSection}>
+          <ThemedText style={styles.positionsTitle}>Top Positions</ThemedText>
+
+          {agent.topPositions.map((position, index) => (
+            <View key={index} style={styles.positionRow}>
+              <View style={styles.symbolContainer}>
+                <View style={[styles.symbolIcon]}>
+                  <SvgXml xml={createAvatar(identicon, { seed: position.symbol }).toString()} />
+                </View>
+                <ThemedText style={styles.symbolText}>{position.symbol}</ThemedText>
+              </View>
+              <View style={styles.positionStats}>
+                <View style={styles.percentageContainer}>
+                  {renderProgressBar(position.percentage, 80)}
+                  <ThemedText style={styles.percentageText}>{position.percentage}%</ThemedText>
+                </View>
+              </View>
+            </View>
+          ))}
         </View>
-      </View>
-    </ThemedView>
+
+        {/* Change Stats Section */}
+        <View style={styles.statsSection}>
+          <View style={styles.statItem}>
+            <ThemedText style={styles.timeLabel}>24h</ThemedText>
+            <ThemedText style={styles.changeValue}>{agent.change24h}</ThemedText>
+          </View>
+          <View style={styles.statItem}>
+            <ThemedText style={styles.timeLabel}>7d</ThemedText>
+            <ThemedText style={styles.changeValue}>{agent.change7d}</ThemedText>
+          </View>
+        </View>
+      </ThemedView>
+      <TradingModal visible={showTradingModal} agent={agent} onClose={handleCloseModal} />
+    </>
   );
 };
 

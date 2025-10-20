@@ -1,24 +1,29 @@
+import { AgentHeader } from '@/app/components/AgentHeader';
+import { AgentLogsTab } from '@/app/components/AgentLogsTab';
+import { ExpandedLogsModal } from '@/app/components/ExpandedLogsModal';
+import { ProfileTab } from '@/app/components/ProfileTab';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { mockAgentLogs, mockAgents } from '@/mocks/mocks';
-import { bottts } from '@dicebear/collection';
-import { createAvatar } from '@dicebear/core';
+import { TradingModal } from '@/components/trading-modal';
+import { mockAgents } from '@/mocks/mocks';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const AVATAR_SIZE = 64;
 const AVATAR_BORDER_RADIUS = 12;
 
 type TabType = 'profile' | 'logs';
-type ProtectionLevel = 'degen' | 'moderate' | 'guarded';
 
 export default function AgentDetailScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { agentId } = useLocalSearchParams<{ agentId: string }>();
   const [activeTab, setActiveTab] = useState<TabType>('profile');
-  const [selectedProtection, setSelectedProtection] = useState<ProtectionLevel>('degen');
+  const [showTradingModal, setShowTradingModal] = useState(false);
+  const [showLogsTime, setShowLogsTime] = useState(true);
+  const [logsExpanded, setLogsExpanded] = useState(false);
 
   const agent = useMemo(() => {
     return mockAgents.find((a) => a.id === agentId);
@@ -28,69 +33,24 @@ export default function AgentDetailScreen() {
     return (
       <ThemedView style={styles.container}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <ThemedText style={styles.backButtonText}>‹ Back</ThemedText>
+          <ThemedText style={styles.backButtonText}>‹</ThemedText>
         </Pressable>
         <ThemedText style={styles.errorText}>Agent not found</ThemedText>
       </ThemedView>
     );
   }
 
-  const handleShare = async () => {
-    try {
-      await Share.share({
-        message: `Check out ${agent.name} - ${agent.role}`,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <ThemedView style={styles.container}>
       <Pressable onPress={() => router.back()} style={styles.backButton}>
-        <ThemedText style={styles.backButtonText}>‹ Back</ThemedText>
+        <ThemedText style={styles.backButtonText}>‹</ThemedText>
       </Pressable>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Main Card Container */}
         <View style={styles.mainCard}>
           {/* Agent Header */}
           <View style={styles.cardHeader}>
-            <View style={styles.headerTop}>
-              <View style={styles.avatarContainer}>
-                <SvgXml xml={createAvatar(bottts, { seed: agent.name }).toString()} />
-              </View>
-              <View style={styles.headerInfo}>
-                <ThemedText style={styles.agentId}>Agent {agent.id.padStart(3, '0')}</ThemedText>
-                <ThemedText type='defaultSemiBold' style={styles.agentName}>
-                  {agent.name}
-                </ThemedText>
-                <View style={styles.roleBadge}>
-                  <ThemedText style={styles.roleText}>{agent.role}</ThemedText>
-                </View>
-              </View>
-              <Pressable style={styles.shareButton} onPress={handleShare}>
-                <ThemedText style={styles.shareButtonText}>Share</ThemedText>
-                <ThemedText style={styles.shareIcon}>🔗</ThemedText>
-              </Pressable>
-            </View>
-
-            {/* Address Info */}
-            <View style={styles.addressSection}>
-              <ThemedText style={styles.addressLabel}>DLBX5••••wpR...</ThemedText>
-              <View style={styles.addressIcons}>
-                <View style={styles.iconBadge}>
-                  <ThemedText style={styles.iconText}>⓵</ThemedText>
-                </View>
-                <View style={styles.iconBadge}>
-                  <ThemedText style={styles.iconText}>🔍</ThemedText>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.netWorthSection}>
-              <ThemedText style={styles.netWorthLabel}>Net Worth: </ThemedText>
-              <ThemedText style={styles.netWorthValue}>$1,791.60</ThemedText>
-            </View>
+            <AgentHeader agent={agent} />
           </View>
 
           {/* Tab Navigation */}
@@ -112,193 +72,30 @@ export default function AgentDetailScreen() {
           </View>
 
           {/* Tab Content */}
-          {activeTab === 'profile' && (
-            <View style={styles.tabContent}>
-              {/* Wallet Safety Meter */}
-              <View style={styles.safetySection}>
-                <View style={styles.safetyHeader}>
-                  <ThemedText style={styles.safetyTitle}>Wallet Safety Meter:</ThemedText>
-                  <ThemedText style={styles.safetyScore}>100/100</ThemedText>
-                </View>
-                <View style={styles.safetyMeterContainer}>
-                  <View style={styles.safetyMeterLabel}>
-                    <View style={styles.safetyIconBadge}>
-                      <ThemedText style={styles.safetyCheckmark}>✓</ThemedText>
-                    </View>
-                    <ThemedText style={styles.safetyMeterText}>VERY HIGH</ThemedText>
-                  </View>
-                </View>
-                <View style={styles.safetyGradientBar} />
-              </View>
-
-              {/* Trading Protection Level */}
-              <View style={styles.protectionSection}>
-                <ThemedText style={styles.protectionTitle}>
-                  Trading Protection Level{' '}
-                  <ThemedText style={styles.protectionSubtitle}>(applied by Avo)</ThemedText>
-                </ThemedText>
-
-                <View style={styles.protectionGrid}>
-                  <Pressable
-                    style={[
-                      styles.protectionButton,
-                      selectedProtection === 'degen' && styles.protectionButtonActive,
-                    ]}
-                    onPress={() => setSelectedProtection('degen')}>
-                    <View
-                      style={[
-                        styles.protectionRadio,
-                        selectedProtection === 'degen' && styles.protectionRadioActive,
-                      ]}>
-                      {selectedProtection === 'degen' && <View style={styles.protectionRadioDot} />}
-                    </View>
-                    <ThemedText style={styles.protectionButtonText}>Degen</ThemedText>
-                  </Pressable>
-
-                  <Pressable
-                    style={[
-                      styles.protectionButton,
-                      selectedProtection === 'moderate' && styles.protectionButtonActive,
-                    ]}
-                    onPress={() => setSelectedProtection('moderate')}>
-                    <View
-                      style={[
-                        styles.protectionRadio,
-                        selectedProtection === 'moderate' && styles.protectionRadioActive,
-                      ]}>
-                      {selectedProtection === 'moderate' && (
-                        <View style={styles.protectionRadioDot} />
-                      )}
-                    </View>
-                    <ThemedText style={styles.protectionButtonText}>Moderate</ThemedText>
-                  </Pressable>
-                </View>
-
-                <Pressable
-                  style={[
-                    styles.protectionButton,
-                    styles.protectionButtonFull,
-                    selectedProtection === 'guarded' && styles.protectionButtonActive,
-                  ]}
-                  onPress={() => setSelectedProtection('guarded')}>
-                  <View
-                    style={[
-                      styles.protectionRadio,
-                      selectedProtection === 'guarded' && styles.protectionRadioActive,
-                    ]}>
-                    {selectedProtection === 'guarded' && <View style={styles.protectionRadioDot} />}
-                  </View>
-                  <ThemedText style={styles.protectionButtonText}>Guarded</ThemedText>
-                </Pressable>
-
-                <ThemedText style={styles.protectionDescription}>
-                  High risk, high reward with minimal protections
-                </ThemedText>
-              </View>
-
-              {/* Protection Settings Cards */}
-              <View style={styles.settingsSection}>
-                <ThemedText style={styles.settingsTitle}>
-                  {selectedProtection.charAt(0).toUpperCase() + selectedProtection.slice(1)}{' '}
-                  Protection Settings:
-                </ThemedText>
-
-                <View style={styles.settingCard}>
-                  <ThemedText style={styles.settingLabel}>Min. Market Cap</ThemedText>
-                  <ThemedText style={styles.settingValue}>$10,000</ThemedText>
-                  <ThemedText style={styles.settingRequired}>Min. Required:</ThemedText>
-                </View>
-
-                <View style={styles.settingCard}>
-                  <ThemedText style={styles.settingLabel}>Min. Liquidity</ThemedText>
-                  <ThemedText style={styles.settingValue}>$5,000</ThemedText>
-                  <ThemedText style={styles.settingRequired}>Min. Required:</ThemedText>
-                </View>
-
-                <View style={styles.settingCard}>
-                  <ThemedText style={styles.settingLabel}>Min. 24h Volume</ThemedText>
-                  <ThemedText style={styles.settingValue}>$5,000</ThemedText>
-                  <ThemedText style={styles.settingRequired}>Min. Required:</ThemedText>
-                </View>
-              </View>
-
-              {/* Performance Stats */}
-              <View style={styles.performanceSection}>
-                <View style={styles.performanceRow}>
-                  <View style={styles.performanceItem}>
-                    <ThemedText style={styles.performanceLabel}>24 hour</ThemedText>
-                    <ThemedText style={styles.performanceValue}>-11.36%</ThemedText>
-                  </View>
-                  <View style={styles.performanceItem}>
-                    <ThemedText style={styles.performanceLabel}>7 days</ThemedText>
-                    <ThemedText style={styles.performanceValue}>-18.57%</ThemedText>
-                  </View>
-                  <View style={styles.performanceItem}>
-                    <ThemedText style={styles.performanceLabel}>30 days</ThemedText>
-                    <ThemedText style={styles.performanceValue}>-82.96%</ThemedText>
-                  </View>
-                </View>
-              </View>
-
-              {/* Buy Button */}
-              <Pressable style={styles.buyButton}>
-                <ThemedText style={styles.buyButtonText}>Buy Agent</ThemedText>
-                <ThemedText style={styles.buyButtonArrow}> ›</ThemedText>
-              </Pressable>
-            </View>
-          )}
+          {activeTab === 'profile' && <ProfileTab onBuyPress={() => setShowTradingModal(true)} />}
 
           {/* Agent Logs Tab */}
           {activeTab === 'logs' && (
-            <View style={styles.logsContent}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={true}
-                scrollEventThrottle={16}
-                style={styles.logsScrollContainer}>
-                <View style={styles.logsListContainer}>
-                  {mockAgentLogs.map((log) => (
-                    <View key={log.id} style={styles.logEntry}>
-                      <View style={styles.logLeftHalf}>
-                        <ThemedText style={styles.logTimestamp}>{log.timestamp}</ThemedText>
-                        <View
-                          style={[
-                            styles.logIcon,
-                            {
-                              backgroundColor:
-                                log.type === 'SUCCESS'
-                                  ? 'rgba(0, 229, 160, 0.15)'
-                                  : 'rgba(77, 124, 255, 0.15)',
-                            },
-                          ]}>
-                          <ThemedText
-                            style={[
-                              styles.logIconText,
-                              {
-                                color: log.type === 'SUCCESS' ? '#00E5A0' : '#4D9DFF',
-                              },
-                            ]}>
-                            {log.type === 'SUCCESS' ? '✓' : 'ⓘ'}
-                          </ThemedText>
-                        </View>
-                        <ThemedText style={styles.logType}>[{log.type}]</ThemedText>
-                      </View>
-                      <View style={styles.logRightHalf}>
-                        <ThemedText style={styles.logMessage}>{log.message}</ThemedText>
-                      </View>
-                    </View>
-                  ))}
-                </View>
-              </ScrollView>
-              <View style={styles.logsFooter}>
-                <ThemedText style={styles.logsFooterText}>
-                  Displaying last 100 log entries.
-                </ThemedText>
-              </View>
-            </View>
+            <AgentLogsTab
+              showLogsTime={showLogsTime}
+              onShowLogsTimeToggle={() => setShowLogsTime(!showLogsTime)}
+              onExpandPress={() => setLogsExpanded(true)}
+            />
           )}
         </View>
       </ScrollView>
+      <TradingModal
+        visible={showTradingModal}
+        agent={agent}
+        onClose={() => setShowTradingModal(false)}
+      />
+
+      <ExpandedLogsModal
+        visible={logsExpanded}
+        showLogsTime={showLogsTime}
+        onClose={() => setLogsExpanded(false)}
+        topInset={insets.top}
+      />
     </ThemedView>
   );
 }
@@ -470,39 +267,74 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
-  logsContent: {
-    paddingHorizontal: 10,
-    paddingVertical: 20,
+  logsCard: {
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 229, 160, 0.3)',
+    backgroundColor: 'rgba(0, 229, 160, 0.05)',
+    overflow: 'hidden',
+  },
+  logsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  logsHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  logsHeaderTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  logsHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  logsHeaderButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  logsHeaderButtonText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#888',
+  },
+  logsContentWrapper: {
     backgroundColor: '#000',
+    minHeight: 200,
   },
   logsScrollContainer: {
-    marginHorizontal: -16,
-    paddingHorizontal: 16,
     flex: 1,
   },
   logsListContainer: {
-    gap: 8,
+    gap: 0,
     paddingRight: 16,
+    paddingLeft: 16,
+    paddingVertical: 12,
   },
   logEntry: {
     flexDirection: 'row',
-    gap: 85,
+    gap: 12,
     paddingVertical: 8,
-    paddingHorizontal: 10,
     alignItems: 'flex-start',
-  },
-  logLeftHalf: {
-    width: 140,
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-    flexShrink: 0,
   },
   logTimestamp: {
     color: '#666',
     fontSize: 11,
     fontWeight: '400',
-    width: 120,
+    width: 70,
     flexShrink: 0,
   },
   logIcon: {
@@ -520,24 +352,21 @@ const styles = StyleSheet.create({
   logType: {
     fontSize: 11,
     fontWeight: '600',
-    width: 60,
+    width: 70,
     flexShrink: 0,
   },
-  logRightHalf: {
-    flex: 1,
-    paddingLeft: 4,
-  },
   logMessage: {
-    color: '#b5b5b5ff',
+    color: '#b5b5b5',
     fontSize: 11,
     fontWeight: '400',
-    flexWrap: 'nowrap',
+    flex: 1,
   },
   logsFooter: {
-    marginTop: 20,
-    paddingTop: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderTopWidth: 1,
     borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#000',
   },
   logsFooterText: {
     color: '#555',
@@ -617,9 +446,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     marginBottom: 12,
+    flexWrap: 'wrap',
   },
   protectionButton: {
-    flex: 1,
+    width: '48%',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
@@ -631,7 +461,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   protectionButtonFull: {
-    flex: 1,
+    width: '48%',
   },
   protectionButtonActive: {
     backgroundColor: 'rgba(77, 124, 255, 0.2)',
@@ -684,17 +514,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     marginBottom: 12,
   },
+  settingCardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  settingCardLeft: {
+    flex: 1,
+    gap: 4,
+  },
   settingLabel: {
     color: '#fff',
     fontSize: 14,
     fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: 0,
   },
   settingValue: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
-    marginBottom: 8,
+    marginBottom: 0,
   },
   settingRequired: {
     color: '#888',
@@ -753,17 +592,119 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   backButton: {
-    marginBottom: 16,
+    marginTop: 12,
+    marginBottom: 12,
+    marginHorizontal: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backButtonText: {
-    color: '#4D7CFF',
-    fontSize: 16,
-    paddingHorizontal: 12,
-    paddingTop: 16,
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: '600',
   },
   errorText: {
     color: '#fff',
     fontSize: 16,
     textAlign: 'center',
+  },
+  expandedLogsContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  expandedLogsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: 'transparent',
+  },
+  expandedLogsTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  expandedLogsHeaderButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  expandedLogsHeaderButtonText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#888',
+  },
+  expandedLogsScrollContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  expandedLogsListContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  expandedLogEntry: {
+    flexDirection: 'row',
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    alignItems: 'flex-start',
+  },
+  expandedLogTimestamp: {
+    color: '#666',
+    fontSize: 12,
+    fontWeight: '400',
+    width: 80,
+    flexShrink: 0,
+  },
+  expandedLogIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  expandedLogIconText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  expandedLogType: {
+    fontSize: 12,
+    fontWeight: '600',
+    width: 80,
+    flexShrink: 0,
+  },
+  expandedLogMessage: {
+    color: '#b5b5b5',
+    fontSize: 12,
+    fontWeight: '400',
+    flex: 1,
+    lineHeight: 16,
+  },
+  expandedLogsFooter: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#000',
+  },
+  expandedLogsFooterText: {
+    color: '#555',
+    fontSize: 12,
+    fontWeight: '400',
   },
 });
