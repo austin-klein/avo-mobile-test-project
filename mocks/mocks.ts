@@ -3,7 +3,7 @@ import { Agent } from '@/types/types';
 export const mockAgents: Agent[] = [
   {
     id: '1',
-    name: 'UNI',
+    name: 'Bandit',
     role: 'Wallet Tracker Agent',
     topPositions: [
       {
@@ -20,7 +20,7 @@ export const mockAgents: Agent[] = [
   },
   {
     id: '2',
-    name: 'AVX',
+    name: 'Bunny',
     role: 'Wallet Tracker Agent',
     topPositions: [
       {

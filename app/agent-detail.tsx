@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
   roleBadge: {
     backgroundColor: '#3D2680',
     paddingHorizontal: 6,
-    paddingVertical: 6,
+    paddingVertical: 2,
     borderRadius: 8,
     alignSelf: 'flex-start',
     maxWidth: '100%',
@@ -473,6 +473,7 @@ const styles = StyleSheet.create({
   logsContent: {
     paddingHorizontal: 10,
     paddingVertical: 20,
+    backgroundColor: '#000',
   },
   logsScrollContainer: {
     marginHorizontal: -16,
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
     paddingLeft: 4,
   },
   logMessage: {
-    color: '#aaa',
+    color: '#b5b5b5ff',
     fontSize: 11,
     fontWeight: '400',
     flexWrap: 'nowrap',

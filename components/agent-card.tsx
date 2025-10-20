@@ -138,15 +138,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   agentName: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '700',
     letterSpacing: 0.5,
+    paddingTop: 14,
   },
   roleBadge: {
     backgroundColor: '#3D2680',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 14,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
     alignSelf: 'flex-start',
   },
   roleText: {
