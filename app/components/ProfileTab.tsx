@@ -11,7 +11,9 @@ interface ProfileTabProps {
 type ProtectionLevel = 'degen' | 'moderate' | 'guarded';
 
 export function ProfileTab({ onBuyPress, agent }: ProfileTabProps) {
-  const [selectedProtection, setSelectedProtection] = useState<ProtectionLevel>('degen');
+  const [selectedProtection, setSelectedProtection] = useState<ProtectionLevel>(
+    agent.protectionLevel[0].toLowerCase() as ProtectionLevel
+  );
 
   return (
     <View style={styles.tabContent}>

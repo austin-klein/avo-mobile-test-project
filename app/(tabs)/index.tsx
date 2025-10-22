@@ -9,20 +9,18 @@ export default function TabOneScreen() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedType, setSelectedType] = useState('Wallets');
   const [selectedSort, setSelectedSort] = useState('24h');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchText, setSearchText] = useState('');
   const [selectedProtection, setSelectedProtection] = useState('Degen');
 
   const filteredAgents = useMemo(() => {
     return mockAgents
       .filter((agent) => {
-        const searchMatch =
-          searchText === '' || agent.name.toLowerCase().includes(searchText.toLowerCase());
-
         const protectionMatch = agent.protectionLevel.includes(
           selectedProtection as 'Degen' | 'Moderate' | 'Guarded'
         );
 
-        return searchMatch && protectionMatch;
+        return protectionMatch;
       })
       .sort((a, b) => {
         // Sort by selected timeframe
@@ -33,7 +31,7 @@ export default function TabOneScreen() {
         }
         return 0;
       });
-  }, [selectedSort, searchText, selectedProtection]);
+  }, [selectedSort, selectedProtection]);
 
   return (
     <GifScrollView backgroundGif='https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODdmdjI3NHpidG0wdW10Z2NlZGxsYm84eGIwemR5dzZpODk0cGV4OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VXhUTVzvNmlRm/giphy.gif'>
