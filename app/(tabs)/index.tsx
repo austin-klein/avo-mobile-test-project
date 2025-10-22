@@ -6,30 +6,23 @@ import { useMemo, useState } from 'react';
 import { FlatList } from 'react-native';
 
 export default function TabOneScreen() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedType, setSelectedType] = useState('Wallets');
   const [selectedSort, setSelectedSort] = useState('24h');
   const [searchText, setSearchText] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedProtection, setSelectedProtection] = useState('Degen');
 
   const filteredAgents = useMemo(() => {
     return mockAgents
       .filter((agent) => {
-        // Filter by type - map filter options to agent roles
-        let typeMatch = true;
-        if (selectedType === 'Wallets') {
-          typeMatch = agent.role.toLowerCase().includes('wallet');
-        } else if (selectedType === 'Traders') {
-          typeMatch = agent.role.toLowerCase().includes('trader');
-        } else if (selectedType === 'Funds') {
-          typeMatch = agent.role.toLowerCase().includes('fund');
-        }
-
-        // Filter by search text
         const searchMatch =
           searchText === '' || agent.name.toLowerCase().includes(searchText.toLowerCase());
 
-        return typeMatch && searchMatch;
+        const protectionMatch = agent.protectionLevel.includes(
+          selectedProtection as 'Degen' | 'Moderate' | 'Guarded'
+        );
+
+        return searchMatch && protectionMatch;
       })
       .sort((a, b) => {
         // Sort by selected timeframe
@@ -40,7 +33,7 @@ export default function TabOneScreen() {
         }
         return 0;
       });
-  }, [selectedType, selectedSort, searchText]);
+  }, [selectedSort, searchText, selectedProtection]);
 
   return (
     <GifScrollView backgroundGif='https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExODdmdjI3NHpidG0wdW10Z2NlZGxsYm84eGIwemR5dzZpODk0cGV4OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VXhUTVzvNmlRm/giphy.gif'>

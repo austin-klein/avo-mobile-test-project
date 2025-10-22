@@ -1,14 +1,16 @@
 import { ThemedText } from '@/components/themed-text';
+import { Agent } from '@/types/types';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 interface ProfileTabProps {
   onBuyPress: () => void;
+  agent: Agent;
 }
 
 type ProtectionLevel = 'degen' | 'moderate' | 'guarded';
 
-export function ProfileTab({ onBuyPress }: ProfileTabProps) {
+export function ProfileTab({ onBuyPress, agent }: ProfileTabProps) {
   const [selectedProtection, setSelectedProtection] = useState<ProtectionLevel>('degen');
 
   return (
@@ -38,55 +40,27 @@ export function ProfileTab({ onBuyPress }: ProfileTabProps) {
         </ThemedText>
 
         <View style={styles.protectionGrid}>
-          <Pressable
-            style={[
-              styles.protectionButton,
-              selectedProtection === 'degen' && styles.protectionButtonActive,
-            ]}
-            onPress={() => setSelectedProtection('degen')}>
-            <View
+          {agent.protectionLevel.map((level) => (
+            <Pressable
+              key={level}
               style={[
-                styles.protectionRadio,
-                selectedProtection === 'degen' && styles.protectionRadioActive,
-              ]}>
-              {selectedProtection === 'degen' && <View style={styles.protectionRadioDot} />}
-            </View>
-            <ThemedText style={styles.protectionButtonText}>Degen</ThemedText>
-          </Pressable>
-
-          <Pressable
-            style={[
-              styles.protectionButton,
-              selectedProtection === 'moderate' && styles.protectionButtonActive,
-            ]}
-            onPress={() => setSelectedProtection('moderate')}>
-            <View
-              style={[
-                styles.protectionRadio,
-                selectedProtection === 'moderate' && styles.protectionRadioActive,
-              ]}>
-              {selectedProtection === 'moderate' && <View style={styles.protectionRadioDot} />}
-            </View>
-            <ThemedText style={styles.protectionButtonText}>Moderate</ThemedText>
-          </Pressable>
+                styles.protectionButton,
+                selectedProtection === level.toLowerCase() && styles.protectionButtonActive,
+              ]}
+              onPress={() => setSelectedProtection(level.toLowerCase() as ProtectionLevel)}>
+              <View
+                style={[
+                  styles.protectionRadio,
+                  selectedProtection === level.toLowerCase() && styles.protectionRadioActive,
+                ]}>
+                {selectedProtection === level.toLowerCase() && (
+                  <View style={styles.protectionRadioDot} />
+                )}
+              </View>
+              <ThemedText style={styles.protectionButtonText}>{level}</ThemedText>
+            </Pressable>
+          ))}
         </View>
-
-        <Pressable
-          style={[
-            styles.protectionButton,
-            styles.protectionButtonFull,
-            selectedProtection === 'guarded' && styles.protectionButtonActive,
-          ]}
-          onPress={() => setSelectedProtection('guarded')}>
-          <View
-            style={[
-              styles.protectionRadio,
-              selectedProtection === 'guarded' && styles.protectionRadioActive,
-            ]}>
-            {selectedProtection === 'guarded' && <View style={styles.protectionRadioDot} />}
-          </View>
-          <ThemedText style={styles.protectionButtonText}>Guarded</ThemedText>
-        </Pressable>
 
         <ThemedText style={styles.protectionDescription}>
           High risk, high reward with minimal protections

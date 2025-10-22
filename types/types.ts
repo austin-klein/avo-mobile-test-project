@@ -13,4 +13,5 @@ export interface Agent {
   topPositions: Position[];
   change24h: string;
   change7d: string;
+  protectionLevel: ('Degen' | 'Moderate' | 'Guarded')[];
 }

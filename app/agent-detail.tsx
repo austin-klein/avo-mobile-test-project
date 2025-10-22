@@ -69,7 +69,9 @@ export default function AgentDetailScreen() {
           </View>
 
           {/* Tab Content */}
-          {activeTab === 'profile' && <ProfileTab onBuyPress={() => setShowTradingModal(true)} />}
+          {activeTab === 'profile' && (
+            <ProfileTab onBuyPress={() => setShowTradingModal(true)} agent={agent} />
+          )}
 
           {/* Agent Logs Tab */}
           {activeTab === 'logs' && (

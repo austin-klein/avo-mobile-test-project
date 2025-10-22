@@ -39,8 +39,12 @@ export function AgentHeader({ agent }: AgentHeaderProps) {
           <ThemedText type='defaultSemiBold' style={styles.agentName}>
             {agent.name}
           </ThemedText>
-          <View style={styles.roleBadge}>
-            <ThemedText style={styles.roleText}>{agent.role}</ThemedText>
+          <View
+            style={[styles.roleBadge, agent.role === 'KOL Tracker Agent' && styles.roleBadgeKOL]}>
+            <ThemedText
+              style={[styles.roleText, agent.role === 'KOL Tracker Agent' && styles.roleTextKOL]}>
+              {agent.role}
+            </ThemedText>
           </View>
         </View>
         <Pressable style={styles.shareButton} onPress={handleShare}>
@@ -112,6 +116,14 @@ const styles = StyleSheet.create({
     color: '#9BA3D9',
     fontSize: 10,
     fontWeight: '600',
+  },
+  roleBadgeKOL: {
+    backgroundColor: 'rgba(0, 200, 150, 0.15)',
+    borderColor: 'rgba(0, 200, 150, 0.3)',
+    borderWidth: 1,
+  },
+  roleTextKOL: {
+    color: '#00C896',
   },
   shareButton: {
     borderWidth: 1,
