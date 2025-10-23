@@ -1,6 +1,7 @@
 import { AgentHeader } from '@/app/components/AgentHeader';
 import { AgentLogsTab } from '@/app/components/AgentLogsTab';
 import { ExpandedLogsModal } from '@/app/components/ExpandedLogsModal';
+import { PerformanceGraph } from '@/app/components/PerformanceGraph';
 import { ProfileTab } from '@/app/components/ProfileTab';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -21,6 +22,7 @@ export default function AgentDetailScreen() {
   const [showTradingModal, setShowTradingModal] = useState(false);
   const [showLogsTime, setShowLogsTime] = useState(true);
   const [logsExpanded, setLogsExpanded] = useState(false);
+  const [selectedProtectionLevel, setSelectedProtectionLevel] = useState<string>('');
 
   const agent = useMemo(() => {
     return mockAgents.find((a) => a.id === agentId);
@@ -70,7 +72,11 @@ export default function AgentDetailScreen() {
 
           {/* Tab Content */}
           {activeTab === 'profile' && (
-            <ProfileTab onBuyPress={() => setShowTradingModal(true)} agent={agent} />
+            <ProfileTab
+              onBuyPress={() => setShowTradingModal(true)}
+              agent={agent}
+              onProtectionLevelChange={setSelectedProtectionLevel}
+            />
           )}
 
           {/* Agent Logs Tab */}
@@ -82,6 +88,13 @@ export default function AgentDetailScreen() {
             />
           )}
         </View>
+        {/* Performance Graph */}
+        {agent.performance && (
+          <PerformanceGraph
+            data={agent.performance}
+            protectionLevel={selectedProtectionLevel || agent.protectionLevel[0]}
+          />
+        )}
       </ScrollView>
       <TradingModal
         visible={showTradingModal}

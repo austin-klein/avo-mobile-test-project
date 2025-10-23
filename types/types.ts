@@ -5,6 +5,22 @@ interface Position {
   change7d?: string;
 }
 
+export interface PerformanceDataPoint {
+  timestamp: string;
+  value: number;
+}
+
+export interface PerformanceData {
+  '24h': PerformanceDataPoint[];
+  '7d': PerformanceDataPoint[];
+  '1M': PerformanceDataPoint[];
+  '3M': PerformanceDataPoint[];
+  '1Y': PerformanceDataPoint[];
+  Max: PerformanceDataPoint[];
+  currentValue: number;
+  dataSource: string;
+}
+
 export interface Agent {
   id: string;
   name: string;
@@ -14,4 +30,5 @@ export interface Agent {
   change24h: string;
   change7d: string;
   protectionLevel: ('Degen' | 'Moderate' | 'Guarded')[];
+  performance?: PerformanceData;
 }

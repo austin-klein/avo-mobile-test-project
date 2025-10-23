@@ -6,14 +6,20 @@ import { Pressable, StyleSheet, View } from 'react-native';
 interface ProfileTabProps {
   onBuyPress: () => void;
   agent: Agent;
+  onProtectionLevelChange?: (level: string) => void;
 }
 
 type ProtectionLevel = 'degen' | 'moderate' | 'guarded';
 
-export function ProfileTab({ onBuyPress, agent }: ProfileTabProps) {
+export function ProfileTab({ onBuyPress, agent, onProtectionLevelChange }: ProfileTabProps) {
   const [selectedProtection, setSelectedProtection] = useState<ProtectionLevel>(
     agent.protectionLevel[0].toLowerCase() as ProtectionLevel
   );
+
+  const handleProtectionChange = (level: ProtectionLevel) => {
+    setSelectedProtection(level);
+    onProtectionLevelChange?.(level.charAt(0).toUpperCase() + level.slice(1));
+  };
 
   return (
     <View style={styles.tabContent}>
@@ -49,7 +55,7 @@ export function ProfileTab({ onBuyPress, agent }: ProfileTabProps) {
                 styles.protectionButton,
                 selectedProtection === level.toLowerCase() && styles.protectionButtonActive,
               ]}
-              onPress={() => setSelectedProtection(level.toLowerCase() as ProtectionLevel)}>
+              onPress={() => handleProtectionChange(level.toLowerCase() as ProtectionLevel)}>
               <View
                 style={[
                   styles.protectionRadio,

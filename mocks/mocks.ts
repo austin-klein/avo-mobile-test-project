@@ -1,4 +1,45 @@
-import { Agent } from '@/types/types';
+import { Agent, PerformanceData } from '@/types/types';
+
+// Helper function to generate performance data
+const generatePerformanceData = (
+  startValue: number,
+  volatility: number,
+  trend: number,
+  pointCount: number
+): { timestamp: string; value: number }[] => {
+  const data = [];
+  let currentValue = startValue;
+  const now = new Date();
+
+  for (let i = pointCount - 1; i >= 0; i--) {
+    const randomChange = (Math.random() - 0.5) * volatility;
+    const trendChange = trend / pointCount;
+    currentValue = currentValue * (1 + randomChange + trendChange);
+    currentValue = Math.max(currentValue, startValue * 0.5);
+
+    const date = new Date(now);
+    date.setDate(date.getDate() - i);
+
+    data.push({
+      timestamp: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      value: parseFloat(currentValue.toFixed(2)),
+    });
+  }
+
+  return data;
+};
+
+// Helper to create performance data for agents
+const createPerformanceData = (basePercentage: number): PerformanceData => ({
+  '24h': generatePerformanceData(basePercentage, 0.08, 0.02, 24),
+  '7d': generatePerformanceData(basePercentage, 0.06, 0.01, 7),
+  '1M': generatePerformanceData(basePercentage, 0.04, 0.015, 30),
+  '3M': generatePerformanceData(basePercentage, 0.03, 0.02, 90),
+  '1Y': generatePerformanceData(basePercentage, 0.025, 0.025, 52),
+  Max: generatePerformanceData(basePercentage, 0.025, 0.03, 100),
+  currentValue: basePercentage,
+  dataSource: 'Avo AI',
+});
 
 export const mockAgents: Agent[] = [
   {
@@ -18,6 +59,7 @@ export const mockAgents: Agent[] = [
     change24h: '34.40%',
     change7d: '20.45%',
     protectionLevel: ['Degen'],
+    performance: createPerformanceData(44.47),
   },
   {
     id: '2',
@@ -40,6 +82,7 @@ export const mockAgents: Agent[] = [
     change24h: '12.60%',
     change7d: '45.40%',
     protectionLevel: ['Degen', 'Moderate'],
+    performance: createPerformanceData(38.92),
   },
   {
     id: '3',
@@ -58,6 +101,7 @@ export const mockAgents: Agent[] = [
     change24h: '8.15%',
     change7d: '31.22%',
     protectionLevel: ['Moderate', 'Guarded'],
+    performance: createPerformanceData(35.67),
   },
   {
     id: '4',
@@ -84,6 +128,7 @@ export const mockAgents: Agent[] = [
     change24h: '2.34%',
     change7d: '18.90%',
     protectionLevel: ['Degen'],
+    performance: createPerformanceData(32.15),
   },
   {
     id: '5',
@@ -106,6 +151,7 @@ export const mockAgents: Agent[] = [
     change24h: '5.67%',
     change7d: '12.45%',
     protectionLevel: ['Moderate', 'Guarded'],
+    performance: createPerformanceData(41.23),
   },
   {
     id: '6',
@@ -132,6 +178,7 @@ export const mockAgents: Agent[] = [
     change24h: '15.89%',
     change7d: '52.33%',
     protectionLevel: ['Degen', 'Moderate'],
+    performance: createPerformanceData(47.82),
   },
   {
     id: '7',
@@ -154,6 +201,7 @@ export const mockAgents: Agent[] = [
     change24h: '3.42%',
     change7d: '22.11%',
     protectionLevel: ['Degen', 'Guarded'],
+    performance: createPerformanceData(36.54),
   },
   {
     id: '8',
@@ -176,6 +224,7 @@ export const mockAgents: Agent[] = [
     change24h: '7.23%',
     change7d: '19.87%',
     protectionLevel: ['Degen', 'Moderate', 'Guarded'],
+    performance: createPerformanceData(39.71),
   },
 ];
 
