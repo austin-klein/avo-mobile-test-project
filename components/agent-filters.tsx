@@ -8,6 +8,8 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { DropdownButton } from './ui/DropdownButton';
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, AVATAR, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
 
 interface FilterProps {
   onTypeChange: (type: string) => void;
@@ -19,8 +21,6 @@ interface FilterProps {
 const TYPE_OPTIONS = ['Wallets', 'Indexes', 'Reasoning Agents'];
 const PROTECTION_OPTIONS = ['Degen', 'Moderate', 'Guarded'];
 const SORT_OPTIONS = ['24h', '7d', '1M'];
-const AVATAR_SIZE = 32;
-const AVATAR_BORDER_RADIUS = 6;
 
 export function AgentFilters({
   onTypeChange,
@@ -206,9 +206,9 @@ export function AgentFilters({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    gap: 12,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.lg,
+    gap: SPACING.md,
     backgroundColor: 'transparent',
   },
   headerRow: {
@@ -217,85 +217,85 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 16,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    borderRadius: BORDER_RADIUS.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderColor: Colors.borders.light,
+    backgroundColor: Colors.neutral.darkCardAlt,
   },
   filterButtonActive: {
-    backgroundColor: 'rgba(77, 124, 255, 0.2)',
-    borderColor: 'rgba(77, 124, 255, 0.4)',
+    backgroundColor: Colors.primary.light,
+    borderColor: Colors.primary.lighter,
   },
   filterButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.lg,
+    fontWeight: FONT_WEIGHT.semibold,
   },
   filtersContent: {
-    gap: 12,
+    gap: SPACING.md,
   },
   searchBox: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderRadius: 16,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.lg,
+    borderRadius: BORDER_RADIUS.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
+    borderColor: Colors.borders.light,
+    backgroundColor: Colors.neutral.darkCardAlt,
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.medium,
   },
   dropdownMenuContainer: {
-    borderRadius: 16,
+    borderRadius: BORDER_RADIUS.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(20, 20, 30, 0.95)',
+    borderColor: Colors.borders.light,
+    backgroundColor: Colors.background.translucent,
     overflow: 'hidden',
     marginHorizontal: 0,
   },
   dropdownMenuItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+    borderBottomColor: Colors.borders.lighter,
   },
   dropdownMenuItemSelected: {
-    backgroundColor: 'rgba(77, 124, 255, 0.2)',
+    backgroundColor: Colors.primary.light,
   },
   dropdownMenuText: {
-    color: '#888',
-    fontSize: 16,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.medium,
   },
   dropdownMenuTextSelected: {
-    color: '#4D7CFF',
-    fontWeight: '600',
+    color: Colors.primary.main,
+    fontWeight: FONT_WEIGHT.bold,
   },
   searchResultsContainer: {
-    borderRadius: 12,
+    borderRadius: BORDER_RADIUS.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(20, 20, 30, 0.95)',
+    borderColor: Colors.borders.light,
+    backgroundColor: Colors.background.translucent,
     overflow: 'hidden',
-    marginTop: -8,
+    marginTop: -SPACING.md,
     maxHeight: 300,
   },
   searchResultItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+    borderBottomColor: Colors.borders.lighter,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
+    gap: SPACING.md,
   },
   searchResultAvatar: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_BORDER_RADIUS,
+    width: AVATAR.xs,
+    height: AVATAR.xs,
+    borderRadius: AVATAR.borderRadius.xs,
     overflow: 'hidden',
     flexShrink: 0,
   },
@@ -303,20 +303,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchResultName: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.semibold,
   },
   searchResultRole: {
-    color: '#888',
-    fontSize: 12,
-    fontWeight: '400',
-    marginTop: 4,
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.regular,
+    marginTop: SPACING.xs,
   },
   searchResultArrow: {
-    color: '#4D7CFF',
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 12,
+    color: Colors.primary.main,
+    fontSize: FONT_SIZE.xxl,
+    fontWeight: FONT_WEIGHT.bold,
+    marginLeft: SPACING.lg,
   },
 });

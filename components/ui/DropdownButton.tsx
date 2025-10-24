@@ -1,5 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { ThemedText } from '../themed-text';
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
 
 export function DropdownButton({
   label,
@@ -26,29 +28,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderRadius: 16,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.md,
+    borderRadius: BORDER_RADIUS.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderColor: Colors.borders.light,
+    backgroundColor: Colors.background.translucent,
   },
   dropdownContent: {
     flexDirection: 'row',
   },
   dropdownLabel: {
-    color: '#888',
-    fontSize: 16,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.lg,
+    fontWeight: FONT_WEIGHT.medium,
   },
   dropdownValue: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.lg,
+    fontWeight: FONT_WEIGHT.semibold,
   },
   dropdownArrow: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '600',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xxl,
+    fontWeight: FONT_WEIGHT.semibold,
   },
 });

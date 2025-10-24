@@ -8,24 +8,21 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, AVATAR, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
+import { CommonStyles } from '@/constants/commonStyles';
+import { getStatusColor } from '@/utils/styling';
 
-// Constants for dimensions
-const AVATAR_SIZE = 80;
-const AVATAR_BORDER_RADIUS = 16;
-const SYMBOL_ICON_SIZE = 32;
-const SYMBOL_ICON_BORDER_RADIUS = 8;
-const PROGRESS_BAR_MAX_WIDTH = 80;
-
-const renderProgressBar = (percentage: number, maxWidth: number = PROGRESS_BAR_MAX_WIDTH) => {
+const ProgressBar = ({ percentage, maxWidth = 80 }: { percentage: number; maxWidth?: number }) => {
   const filledWidth = (percentage / 100) * maxWidth;
   return (
-    <View style={[styles.progressBarContainer, { width: maxWidth }]}>
+    <View style={[CommonStyles.progressBarContainer, { width: maxWidth }]}>
       <View
         style={[
-          styles.progressBarFill,
+          CommonStyles.progressBarFill,
           {
             width: filledWidth,
-            backgroundColor: percentage > 50 ? '#00C896' : '#4D9DFF',
+            backgroundColor: Colors.primary.main,
           },
         ]}
       />
@@ -87,7 +84,7 @@ export const AgentCard = ({ agent }: { agent: Agent }) => {
         </View>
 
         {/* Divider */}
-        <View style={styles.divider} />
+        <View style={CommonStyles.divider} />
 
         {/* Top Positions Section */}
         <View style={styles.positionsSection}>
@@ -103,7 +100,7 @@ export const AgentCard = ({ agent }: { agent: Agent }) => {
               </View>
               <View style={styles.positionStats}>
                 <View style={styles.percentageContainer}>
-                  {renderProgressBar(position.percentage, 80)}
+                  <ProgressBar percentage={position.percentage} maxWidth={80} />
                   <ThemedText style={styles.percentageText}>{position.percentage}%</ThemedText>
                 </View>
               </View>
@@ -113,14 +110,8 @@ export const AgentCard = ({ agent }: { agent: Agent }) => {
 
         {/* Change Stats Section */}
         <View style={styles.statsSection}>
-          <View style={styles.statItem}>
-            <ThemedText style={styles.timeLabel}>24h</ThemedText>
-            <ThemedText style={styles.changeValue}>{agent.change24h}</ThemedText>
-          </View>
-          <View style={styles.statItem}>
-            <ThemedText style={styles.timeLabel}>7d</ThemedText>
-            <ThemedText style={styles.changeValue}>{agent.change7d}</ThemedText>
-          </View>
+          <StatItem label='24h' value={agent.change24h} />
+          <StatItem label='7d' value={agent.change7d} />
         </View>
       </ThemedView>
       <TradingModal visible={showTradingModal} agent={agent} onClose={handleCloseModal} />
@@ -128,182 +119,169 @@ export const AgentCard = ({ agent }: { agent: Agent }) => {
   );
 };
 
+const StatItem = ({ label, value }: { label: string; value: string }) => (
+  <View style={styles.statItem}>
+    <ThemedText style={styles.timeLabel}>{label}</ThemedText>
+    <ThemedText
+      style={[
+        styles.changeValue,
+        { color: getStatusColor(parseFloat(value) >= 0) },
+      ]}>
+      {value}
+    </ThemedText>
+  </View>
+);
+
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 12,
-    borderRadius: 24,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    ...CommonStyles.card,
+    marginVertical: SPACING.md,
   },
   headerSection: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 20,
-    gap: 16,
+    marginBottom: SPACING.xl,
+    gap: SPACING.lg,
   },
   avatarContainer: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_BORDER_RADIUS,
+    width: AVATAR.lg,
+    height: AVATAR.lg,
+    borderRadius: AVATAR.borderRadius.lg,
     overflow: 'hidden',
     flexShrink: 0,
   },
   headerInfo: {
     flex: 1,
-    gap: 10,
+    gap: SPACING.md,
     justifyContent: 'center',
   },
   agentName: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: FONT_SIZE.title,
+    fontWeight: FONT_WEIGHT.bold,
     letterSpacing: 0.5,
-    paddingTop: 14,
+    paddingTop: SPACING.md,
   },
   roleBadge: {
     backgroundColor: '#3D2680',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 8,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
+    borderRadius: BORDER_RADIUS.md,
     alignSelf: 'flex-start',
   },
   roleText: {
     color: '#9BA3D9',
-    fontSize: 13,
-    fontWeight: '500',
+    fontSize: FONT_SIZE.md,
+    fontWeight: FONT_WEIGHT.medium,
   },
   roleBadgeKOL: {
-    backgroundColor: 'rgba(0, 200, 150, 0.15)',
-    borderColor: 'rgba(0, 200, 150, 0.3)',
+    backgroundColor: Colors.status.success_light,
+    borderColor: Colors.status.success_border,
     borderWidth: 1,
   },
   roleTextKOL: {
-    color: '#00C896',
+    color: Colors.status.success,
   },
   buttonContainer: {
     flexDirection: 'row',
-    gap: 8,
-    marginBottom: 20,
+    gap: SPACING.sm,
+    marginBottom: SPACING.xl,
   },
   buyButton: {
+    ...CommonStyles.buttonPrimary,
     flex: 1,
-    backgroundColor: '#4D7CFF',
-    paddingVertical: 15,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(157, 77, 255, 0.3)',
+    paddingVertical: SPACING.lg,
   },
   buyButtonText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: '600',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.semibold,
     letterSpacing: 0.3,
   },
   secondaryButton: {
-    paddingHorizontal: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    ...CommonStyles.buttonSecondary,
+    paddingHorizontal: SPACING.xl,
+    paddingVertical: SPACING.lg,
+    borderRadius: BORDER_RADIUS.lg,
   },
   secondaryButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    marginVertical: 20,
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xxl,
+    fontWeight: FONT_WEIGHT.semibold,
   },
   positionsSection: {
-    marginBottom: 24,
+    marginBottom: SPACING.xxl,
   },
   positionsTitle: {
-    color: '#888',
-    fontSize: 13,
-    fontWeight: '600',
-    marginBottom: 16,
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.md,
+    fontWeight: FONT_WEIGHT.semibold,
+    marginBottom: SPACING.lg,
     letterSpacing: 0.5,
   },
   positionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: SPACING.md,
   },
   symbolContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: SPACING.lg,
     flex: 0.4,
   },
   symbolIcon: {
-    width: SYMBOL_ICON_SIZE,
-    height: SYMBOL_ICON_SIZE,
-    borderRadius: SYMBOL_ICON_BORDER_RADIUS,
+    width: 32,
+    height: 32,
+    borderRadius: BORDER_RADIUS.md,
     flexShrink: 0,
   },
   symbolText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '600',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.semibold,
   },
   positionStats: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: SPACING.lg,
     flex: 0.6,
   },
   percentageContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: SPACING.md,
     flex: 1,
-  },
-  progressBarContainer: {
-    height: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: 2.5,
-    overflow: 'hidden',
-    flex: 1,
-  },
-  progressBarFill: {
-    height: '100%',
-    borderRadius: 2.5,
   },
   percentageText: {
-    color: '#fff',
-    fontSize: 13,
-    fontWeight: '700',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.md,
+    fontWeight: FONT_WEIGHT.bold,
     minWidth: 50,
     textAlign: 'right',
   },
   statsSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 24,
-    paddingTop: 16,
+    marginTop: SPACING.xxl,
+    paddingTop: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: Colors.borders.lighter,
   },
   statItem: {
     alignItems: 'center',
-    gap: 8,
+    gap: SPACING.md,
   },
   timeLabel: {
-    color: '#888',
-    fontSize: 12,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.sm,
+    fontWeight: FONT_WEIGHT.medium,
   },
   changeValue: {
-    color: '#00E5A0',
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: FONT_SIZE.xxl,
+    fontWeight: FONT_WEIGHT.bold,
     letterSpacing: -0.5,
   },
 });

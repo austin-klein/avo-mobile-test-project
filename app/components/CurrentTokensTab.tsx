@@ -1,49 +1,19 @@
 import { ThemedText } from '@/components/themed-text';
+import { Badge } from '@/components/ui/badge';
 import { CurrentToken } from '@/types/types';
 import { identicon } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, AVATAR, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
+import { CommonStyles } from '@/constants/commonStyles';
+import { formatNumber, getRiskColor } from '@/utils/styling';
 
 interface CurrentTokensTabProps {
   tokens: CurrentToken[];
 }
-
-const getRiskColor = (riskLevel: string): string => {
-  switch (riskLevel) {
-    case 'Low Risk':
-      return '#00E5A0';
-    case 'Medium Risk':
-      return '#FFD700';
-    case 'High Risk':
-      return '#FF6B6B';
-    default:
-      return '#888';
-  }
-};
-
-const getRiskBgColor = (riskLevel: string): string => {
-  switch (riskLevel) {
-    case 'Low Risk':
-      return 'rgba(0, 229, 160, 0.15)';
-    case 'Medium Risk':
-      return 'rgba(255, 215, 0, 0.15)';
-    case 'High Risk':
-      return 'rgba(255, 107, 107, 0.15)';
-    default:
-      return 'rgba(136, 136, 136, 0.15)';
-  }
-};
-
-const formatNumber = (num: number): string => {
-  if (num >= 1000000) {
-    return `$${(num / 1000000).toFixed(2)}M`;
-  } else if (num >= 1000) {
-    return `$${(num / 1000).toFixed(2)}K`;
-  }
-  return `$${num.toFixed(6)}`;
-};
 
 export function CurrentTokensTab({ tokens }: CurrentTokensTabProps) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -77,12 +47,7 @@ export function CurrentTokensTab({ tokens }: CurrentTokensTabProps) {
               </View>
 
               {/* Risk Badge */}
-              <View
-                style={[styles.riskBadge, { backgroundColor: getRiskBgColor(token.riskLevel) }]}>
-                <ThemedText style={[styles.riskText, { color: getRiskColor(token.riskLevel) }]}>
-                  {token.riskLevel}
-                </ThemedText>
-              </View>
+              <Badge customRiskLevel={token.riskLevel as any} label={token.riskLevel} />
             </View>
 
             {/* Allocation Bar */}
@@ -91,10 +56,10 @@ export function CurrentTokensTab({ tokens }: CurrentTokensTabProps) {
                 <ThemedText style={styles.allocationLabel}>Allocation</ThemedText>
                 <ThemedText style={styles.allocationValue}>{token.allocation}%</ThemedText>
               </View>
-              <View style={styles.progressBarBackground}>
+              <View style={CommonStyles.progressBarContainer}>
                 <View
                   style={[
-                    styles.progressBar,
+                    CommonStyles.progressBarFill,
                     {
                       width: `${token.allocation}%`,
                       backgroundColor: getRiskColor(token.riskLevel),
@@ -122,55 +87,10 @@ export function CurrentTokensTab({ tokens }: CurrentTokensTabProps) {
             {expandedIndex === index && token.price !== undefined && (
               <View style={styles.expandedDetailsContainer}>
                 <View style={styles.detailsGrid}>
-                  {/* Token Price */}
-                  <View style={styles.detailItem}>
-                    <View style={styles.detailIconContainer}>
-                      <ThemedText style={styles.detailIcon}>💰</ThemedText>
-                    </View>
-                    <View style={styles.detailContent}>
-                      <ThemedText style={styles.detailLabel}>Token Price</ThemedText>
-                      <ThemedText style={styles.detailValue}>${token.price.toFixed(6)}</ThemedText>
-                    </View>
-                  </View>
-
-                  {/* Liquidity */}
-                  <View style={styles.detailItem}>
-                    <View style={styles.detailIconContainer}>
-                      <ThemedText style={styles.detailIcon}>💧</ThemedText>
-                    </View>
-                    <View style={styles.detailContent}>
-                      <ThemedText style={styles.detailLabel}>Liquidity</ThemedText>
-                      <ThemedText style={styles.detailValue}>
-                        {formatNumber(token.liquidity || 0)}
-                      </ThemedText>
-                    </View>
-                  </View>
-
-                  {/* Market Cap */}
-                  <View style={styles.detailItem}>
-                    <View style={styles.detailIconContainer}>
-                      <ThemedText style={styles.detailIcon}>📊</ThemedText>
-                    </View>
-                    <View style={styles.detailContent}>
-                      <ThemedText style={styles.detailLabel}>Market Cap</ThemedText>
-                      <ThemedText style={styles.detailValue}>
-                        {formatNumber(token.marketCap || 0)}
-                      </ThemedText>
-                    </View>
-                  </View>
-
-                  {/* 24h Volume */}
-                  <View style={styles.detailItem}>
-                    <View style={styles.detailIconContainer}>
-                      <ThemedText style={styles.detailIcon}>📈</ThemedText>
-                    </View>
-                    <View style={styles.detailContent}>
-                      <ThemedText style={styles.detailLabel}>24h Volume</ThemedText>
-                      <ThemedText style={styles.detailValue}>
-                        {formatNumber(token.volume24h || 0)}
-                      </ThemedText>
-                    </View>
-                  </View>
+                  <DetailItem icon='💰' label='Token Price' value={`$${token.price.toFixed(6)}`} />
+                  <DetailItem icon='💧' label='Liquidity' value={formatNumber(token.liquidity || 0)} />
+                  <DetailItem icon='📊' label='Market Cap' value={formatNumber(token.marketCap || 0)} />
+                  <DetailItem icon='📈' label='24h Volume' value={formatNumber(token.volume24h || 0)} />
                 </View>
               </View>
             )}
@@ -181,47 +101,55 @@ export function CurrentTokensTab({ tokens }: CurrentTokensTabProps) {
   );
 }
 
+const DetailItem = ({ icon, label, value }: { icon: string; label: string; value: string }) => (
+  <View style={styles.detailItem}>
+    <View style={styles.detailIconContainer}>
+      <ThemedText style={styles.detailIcon}>{icon}</ThemedText>
+    </View>
+    <View style={styles.detailContent}>
+      <ThemedText style={styles.detailLabel}>{label}</ThemedText>
+      <ThemedText style={styles.detailValue}>{value}</ThemedText>
+    </View>
+  </View>
+);
+
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: SPACING.xl,
+    paddingVertical: SPACING.xl,
   },
   title: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 16,
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xxl,
+    fontWeight: FONT_WEIGHT.bold,
+    marginBottom: SPACING.lg,
   },
   tokensList: {
-    gap: 12,
+    gap: SPACING.md,
   },
   tokenCard: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 16,
+    ...CommonStyles.cardCompact,
   },
   tokenHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 16,
+    marginBottom: SPACING.lg,
   },
   tokenInfo: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: SPACING.md,
   },
   avatarWrapper: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: AVATAR.sm,
+    height: AVATAR.sm,
+    borderRadius: AVATAR.borderRadius.sm,
     overflow: 'hidden',
-    backgroundColor: 'rgba(77, 124, 255, 0.2)',
+    backgroundColor: Colors.primary.light,
     borderWidth: 1,
-    borderColor: 'rgba(77, 124, 255, 0.4)',
+    borderColor: Colors.primary.lighter,
   },
   avatar: {
     width: '100%',
@@ -229,30 +157,21 @@ const styles = StyleSheet.create({
   },
   tokenDetails: {
     flex: 1,
-    gap: 4,
+    gap: SPACING.xs,
   },
   tokenSymbol: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.bold,
   },
   tokenAddress: {
-    color: '#888',
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  riskBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-  },
-  riskText: {
-    fontSize: 12,
-    fontWeight: '600',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.medium,
   },
   allocationContainer: {
-    gap: 8,
-    marginBottom: 12,
+    gap: SPACING.md,
+    marginBottom: SPACING.md,
   },
   allocationHeader: {
     flexDirection: 'row',
@@ -260,83 +179,73 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   allocationLabel: {
-    color: '#888',
-    fontSize: 12,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.medium,
   },
   allocationValue: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  progressBarBackground: {
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '100%',
-    borderRadius: 4,
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.lg,
+    fontWeight: FONT_WEIGHT.bold,
   },
   showMoreContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 4,
-    paddingTop: 8,
+    gap: SPACING.xs,
+    paddingTop: SPACING.md,
   },
   showMoreText: {
-    color: '#888',
-    fontSize: 12,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.medium,
   },
   chevron: {
-    color: '#888',
-    fontSize: 16,
-    fontWeight: '600',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.semibold,
   },
   expandedDetailsContainer: {
-    paddingTop: 16,
+    paddingTop: SPACING.lg,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
-    marginTop: 12,
+    borderTopColor: Colors.borders.lighter,
+    marginTop: SPACING.md,
   },
   detailsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 16,
+    gap: SPACING.lg,
   },
   detailItem: {
     width: '48%',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 12,
+    gap: SPACING.md,
   },
   detailIconContainer: {
     width: 40,
     height: 40,
-    borderRadius: 10,
-    backgroundColor: 'rgba(77, 124, 255, 0.15)',
+    borderRadius: BORDER_RADIUS.lg,
+    backgroundColor: Colors.primary.lighter,
     justifyContent: 'center',
     alignItems: 'center',
   },
   detailIcon: {
-    fontSize: 20,
+    fontSize: FONT_SIZE.xxl,
   },
   detailContent: {
     flex: 1,
-    gap: 4,
+    gap: SPACING.xs,
   },
   detailLabel: {
-    color: '#888',
-    fontSize: 12,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.medium,
   },
   detailValue: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '700',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.lg,
+    fontWeight: FONT_WEIGHT.bold,
   },
 });

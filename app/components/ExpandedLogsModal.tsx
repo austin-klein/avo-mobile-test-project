@@ -2,6 +2,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { mockAgentLogs } from '@/mocks/mocks';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
 
 interface ExpandedLogsModalProps {
   visible: boolean;
@@ -44,15 +46,15 @@ export function ExpandedLogsModal({
                     {
                       backgroundColor:
                         log.type === 'SUCCESS'
-                          ? 'rgba(0, 229, 160, 0.15)'
-                          : 'rgba(77, 124, 255, 0.15)',
+                          ? Colors.status.success_light
+                          : Colors.primary.light,
                     },
                   ]}>
                   <ThemedText
                     style={[
                       styles.expandedLogIconText,
                       {
-                        color: log.type === 'SUCCESS' ? '#00E5A0' : '#4D9DFF',
+                        color: log.type === 'SUCCESS' ? Colors.status.success : Colors.primary.main,
                       },
                     ]}>
                     {log.type === 'SUCCESS' ? '✓' : 'ⓘ'}
@@ -62,7 +64,7 @@ export function ExpandedLogsModal({
                   style={[
                     styles.expandedLogType,
                     {
-                      color: log.type === 'SUCCESS' ? '#00E5A0' : '#4D9DFF',
+                      color: log.type === 'SUCCESS' ? Colors.status.success : Colors.primary.main,
                     },
                   ]}>
                   [{log.type}]
@@ -87,95 +89,95 @@ export function ExpandedLogsModal({
 const styles = StyleSheet.create({
   expandedLogsContainer: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: Colors.neutral.black,
   },
   expandedLogsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.lg,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+    borderBottomColor: Colors.borders.lighter,
     backgroundColor: 'transparent',
   },
   expandedLogsTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#fff',
+    fontSize: FONT_SIZE.xxl,
+    fontWeight: FONT_WEIGHT.bold,
+    color: Colors.neutral.white,
   },
   expandedLogsHeaderButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 8,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: BORDER_RADIUS.md,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderColor: Colors.borders.light,
+    backgroundColor: Colors.neutral.darkCardAlt,
   },
   expandedLogsHeaderButtonText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#888',
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.medium,
+    color: Colors.neutral.gray500,
   },
   expandedLogsScrollContainer: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: Colors.neutral.black,
   },
   expandedLogsListContainer: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
   },
   expandedLogEntry: {
     flexDirection: 'row',
-    gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
+    gap: SPACING.lg,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.md,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    borderBottomColor: Colors.borders.lightest,
     alignItems: 'flex-start',
   },
   expandedLogTimestamp: {
-    color: '#666',
-    fontSize: 12,
-    fontWeight: '400',
+    color: Colors.neutral.gray600,
+    fontSize: FONT_SIZE.sm,
+    fontWeight: FONT_WEIGHT.regular,
     width: 80,
     flexShrink: 0,
   },
   expandedLogIcon: {
     width: 24,
     height: 24,
-    borderRadius: 4,
+    borderRadius: BORDER_RADIUS.sm,
     justifyContent: 'center',
     alignItems: 'center',
     flexShrink: 0,
   },
   expandedLogIconText: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.bold,
   },
   expandedLogType: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: FONT_SIZE.sm,
+    fontWeight: FONT_WEIGHT.bold,
     width: 80,
     flexShrink: 0,
   },
   expandedLogMessage: {
-    color: '#b5b5b5',
-    fontSize: 12,
-    fontWeight: '400',
+    color: Colors.neutral.gray400,
+    fontSize: FONT_SIZE.sm,
+    fontWeight: FONT_WEIGHT.regular,
     flex: 1,
     lineHeight: 16,
   },
   expandedLogsFooter: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
-    backgroundColor: '#000',
+    borderTopColor: Colors.borders.lighter,
+    backgroundColor: Colors.neutral.black,
   },
   expandedLogsFooterText: {
-    color: '#555',
-    fontSize: 12,
-    fontWeight: '400',
+    color: Colors.neutral.gray700,
+    fontSize: FONT_SIZE.sm,
+    fontWeight: FONT_WEIGHT.regular,
   },
 });

@@ -3,9 +3,8 @@ import { bottts } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 import { Pressable, Share, StyleSheet, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-
-const AVATAR_SIZE = 64;
-const AVATAR_BORDER_RADIUS = 12;
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, AVATAR, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
 
 interface Agent {
   id: string;
@@ -78,72 +77,72 @@ const styles = StyleSheet.create({
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    marginBottom: 12,
+    gap: SPACING.md,
+    marginBottom: SPACING.md,
   },
   avatarContainer: {
-    width: AVATAR_SIZE,
-    height: AVATAR_SIZE,
-    borderRadius: AVATAR_BORDER_RADIUS,
+    width: AVATAR.md,
+    height: AVATAR.md,
+    borderRadius: AVATAR.borderRadius.md,
     overflow: 'hidden',
     flexShrink: 0,
   },
   headerInfo: {
     flex: 1,
-    gap: 2,
+    gap: SPACING.xs,
     justifyContent: 'center',
   },
   agentId: {
-    fontSize: 10,
-    color: '#888',
-    fontWeight: '500',
+    fontSize: FONT_SIZE.xs,
+    color: Colors.neutral.gray500,
+    fontWeight: FONT_WEIGHT.medium,
   },
   agentName: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#fff',
+    fontSize: FONT_SIZE.title,
+    fontWeight: FONT_WEIGHT.bold,
+    color: Colors.neutral.white,
     lineHeight: 28,
   },
   roleBadge: {
     backgroundColor: '#3D2680',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.xs,
+    borderRadius: BORDER_RADIUS.md,
     alignSelf: 'flex-start',
     maxWidth: '100%',
   },
   roleText: {
     color: '#9BA3D9',
-    fontSize: 10,
-    fontWeight: '600',
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.bold,
   },
   roleBadgeKOL: {
-    backgroundColor: 'rgba(0, 200, 150, 0.15)',
-    borderColor: 'rgba(0, 200, 150, 0.3)',
+    backgroundColor: Colors.status.success_light,
+    borderColor: Colors.status.success_border,
     borderWidth: 1,
   },
   roleTextKOL: {
-    color: '#00C896',
+    color: Colors.status.success,
   },
   shareButton: {
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    borderColor: Colors.borders.light,
+    borderRadius: BORDER_RADIUS.lg,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.md,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
+    gap: SPACING.sm,
     flexDirection: 'row',
     minHeight: 44,
   },
   shareButtonText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.bold,
   },
   shareIcon: {
-    fontSize: 12,
+    fontSize: FONT_SIZE.xs,
   },
   addressSection: {
     flexDirection: 'row',
@@ -151,40 +150,40 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   addressLabel: {
-    color: '#888',
-    fontSize: 13,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.md,
+    fontWeight: FONT_WEIGHT.medium,
   },
   addressIcons: {
     flexDirection: 'row',
-    gap: 8,
+    gap: SPACING.md,
   },
   iconBadge: {
     width: 28,
     height: 28,
-    borderRadius: 8,
-    backgroundColor: 'rgba(77, 124, 255, 0.2)',
+    borderRadius: BORDER_RADIUS.md,
+    backgroundColor: Colors.primary.light,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(77, 124, 255, 0.3)',
+    borderColor: Colors.primary.lighter,
   },
   iconText: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: FONT_SIZE.md,
+    fontWeight: FONT_WEIGHT.bold,
   },
   netWorthSection: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   netWorthLabel: {
-    color: '#888',
-    fontSize: 13,
-    fontWeight: '500',
+    color: Colors.neutral.gray500,
+    fontSize: FONT_SIZE.md,
+    fontWeight: FONT_WEIGHT.medium,
   },
   netWorthValue: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '700',
+    color: Colors.neutral.white,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.bold,
   },
 });

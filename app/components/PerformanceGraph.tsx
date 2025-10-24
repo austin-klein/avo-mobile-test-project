@@ -3,6 +3,9 @@ import { PerformanceData } from '@/types/types';
 import React, { useState } from 'react';
 import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 import Svg, { Defs, Line, LinearGradient, Path, Stop, Text as SvgText } from 'react-native-svg';
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
+import { getStatusColor } from '@/utils/styling';
 
 type TimePeriod = '24h' | '7d' | '1M' | '3M' | '1Y' | 'Max';
 
@@ -143,7 +146,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ data, protec
           <ThemedText style={styles.valueLabel}>Current Performance</ThemedText>
           <View style={styles.currentValueContainer}>
             <ThemedText style={styles.currentValue}>{currentValue}%</ThemedText>
-            <ThemedText style={[styles.changeValue, { color: isPositive ? '#00D084' : '#FF5757' }]}>
+            <ThemedText style={[styles.changeValue, { color: getStatusColor(isPositive) }]}>
               {isPositive ? '+' : ''}
               {change.toFixed(2)}%
             </ThemedText>
@@ -196,7 +199,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ data, protec
           <Path
             d={generatePath()}
             fill='none'
-            stroke={isPositive ? '#00D084' : '#FF5757'}
+            stroke={getStatusColor(isPositive)}
             strokeWidth='2'
             strokeLinecap='round'
             strokeLinejoin='round'
@@ -236,96 +239,96 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({ data, protec
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    borderRadius: 16,
-    padding: 16,
-    marginVertical: 16,
+    backgroundColor: Colors.neutral.darkCard,
+    borderRadius: BORDER_RADIUS.lg,
+    padding: SPACING.lg,
+    marginVertical: SPACING.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderColor: Colors.borders.lighter,
   },
   headerContainer: {
-    marginBottom: 16,
+    marginBottom: SPACING.lg,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
   valueLabel: {
-    fontSize: 12,
-    color: '#888',
-    marginBottom: 4,
+    fontSize: FONT_SIZE.xs,
+    color: Colors.neutral.gray500,
+    marginBottom: SPACING.xs,
   },
   currentValueContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: 8,
+    gap: SPACING.md,
   },
   currentValue: {
     fontSize: 32,
-    fontWeight: '700',
-    color: '#fff',
-    paddingTop: 12,
+    fontWeight: FONT_WEIGHT.bold,
+    color: Colors.neutral.white,
+    paddingTop: SPACING.md,
   },
   changeValue: {
-    fontSize: 16,
-    fontWeight: '600',
-    paddingTop: 4,
+    fontSize: FONT_SIZE.xl,
+    fontWeight: FONT_WEIGHT.semibold,
+    paddingTop: SPACING.xs,
   },
   chartContainer: {
-    marginVertical: 16,
+    marginVertical: SPACING.lg,
     alignItems: 'center',
   },
   sourceContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 12,
+    paddingTop: SPACING.md,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
-    marginBottom: 16,
+    borderTopColor: Colors.borders.lighter,
+    marginBottom: SPACING.lg,
   },
   sourceLabel: {
-    fontSize: 12,
-    color: '#888',
+    fontSize: FONT_SIZE.xs,
+    color: Colors.neutral.gray500,
   },
   sourceBold: {
-    color: '#4D7CFF',
-    fontWeight: '600',
+    color: Colors.primary.main,
+    fontWeight: FONT_WEIGHT.semibold,
   },
   dataSource: {
-    fontSize: 11,
-    color: '#666',
+    fontSize: FONT_SIZE.xs,
+    color: Colors.neutral.gray600,
   },
   periodContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 8,
-    marginBottom: 12,
+    gap: SPACING.md,
+    marginBottom: SPACING.md,
   },
   periodButton: {
     flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
+    paddingVertical: SPACING.md,
+    borderRadius: BORDER_RADIUS.md,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    borderColor: Colors.borders.lighter,
+    backgroundColor: Colors.neutral.darkCardAlt,
     alignItems: 'center',
   },
   periodButtonActive: {
-    borderColor: '#4D7CFF',
-    backgroundColor: 'rgba(77, 124, 255, 0.1)',
+    borderColor: Colors.primary.main,
+    backgroundColor: Colors.primary.light,
   },
   periodButtonText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#666',
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.medium,
+    color: Colors.neutral.gray600,
   },
   periodButtonTextActive: {
-    color: '#fff',
+    color: Colors.neutral.white,
   },
   noDataText: {
-    fontSize: 14,
-    color: '#888',
+    fontSize: FONT_SIZE.lg,
+    color: Colors.neutral.gray500,
     textAlign: 'center',
-    paddingVertical: 32,
+    paddingVertical: SPACING.xxxl,
   },
 });

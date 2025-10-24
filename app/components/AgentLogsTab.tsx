@@ -1,6 +1,8 @@
 import { ThemedText } from '@/components/themed-text';
 import { mockAgentLogs } from '@/mocks/mocks';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Colors } from '@/constants/colors';
+import { SPACING, BORDER_RADIUS, FONT_SIZE, FONT_WEIGHT } from '@/constants/dimensions';
 
 interface AgentLogsTabProps {
   showLogsTime: boolean;
@@ -52,15 +54,15 @@ export function AgentLogsTab({
                       {
                         backgroundColor:
                           log.type === 'SUCCESS'
-                            ? 'rgba(0, 229, 160, 0.15)'
-                            : 'rgba(77, 124, 255, 0.15)',
+                            ? Colors.status.success_light
+                            : Colors.primary.light,
                       },
                     ]}>
                     <ThemedText
                       style={[
                         styles.logIconText,
                         {
-                          color: log.type === 'SUCCESS' ? '#00E5A0' : '#4D9DFF',
+                          color: log.type === 'SUCCESS' ? Colors.status.success : Colors.primary.main,
                         },
                       ]}>
                       {log.type === 'SUCCESS' ? '✓' : 'ⓘ'}
@@ -70,7 +72,7 @@ export function AgentLogsTab({
                     style={[
                       styles.logType,
                       {
-                        color: log.type === 'SUCCESS' ? '#00E5A0' : '#4D9DFF',
+                        color: log.type === 'SUCCESS' ? Colors.status.success : Colors.primary.main,
                       },
                     ]}>
                     [{log.type}]
@@ -93,55 +95,55 @@ export function AgentLogsTab({
 
 const styles = StyleSheet.create({
   tabContent: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingHorizontal: SPACING.xl,
+    paddingVertical: SPACING.xl,
   },
   logsCard: {
-    borderRadius: 16,
+    borderRadius: BORDER_RADIUS.lg,
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 160, 0.3)',
-    backgroundColor: 'rgba(0, 229, 160, 0.05)',
+    borderColor: Colors.status.success_border,
+    backgroundColor: Colors.status.success_light,
     overflow: 'hidden',
   },
   logsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+    borderBottomColor: Colors.borders.lighter,
   },
   logsHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: SPACING.md,
   },
   logsHeaderTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#fff',
+    fontSize: FONT_SIZE.lg,
+    fontWeight: FONT_WEIGHT.bold,
+    color: Colors.neutral.white,
   },
   logsHeaderRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: SPACING.md,
   },
   logsHeaderButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: BORDER_RADIUS.md,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.15)',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderColor: Colors.borders.light,
+    backgroundColor: Colors.neutral.darkCardAlt,
   },
   logsHeaderButtonText: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#888',
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.medium,
+    color: Colors.neutral.gray500,
   },
   logsContentWrapper: {
-    backgroundColor: '#000',
+    backgroundColor: Colors.neutral.black,
     minHeight: 200,
   },
   logsScrollContainer: {
@@ -149,57 +151,57 @@ const styles = StyleSheet.create({
   },
   logsListContainer: {
     gap: 0,
-    paddingRight: 16,
-    paddingLeft: 16,
-    paddingVertical: 12,
+    paddingRight: SPACING.lg,
+    paddingLeft: SPACING.lg,
+    paddingVertical: SPACING.md,
   },
   logEntry: {
     flexDirection: 'row',
-    gap: 12,
-    paddingVertical: 8,
+    gap: SPACING.lg,
+    paddingVertical: SPACING.md,
     alignItems: 'flex-start',
   },
   logTimestamp: {
-    color: '#666',
-    fontSize: 11,
-    fontWeight: '400',
+    color: Colors.neutral.gray600,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.regular,
     width: 70,
     flexShrink: 0,
   },
   logIcon: {
     width: 20,
     height: 20,
-    borderRadius: 4,
+    borderRadius: BORDER_RADIUS.sm,
     justifyContent: 'center',
     alignItems: 'center',
     flexShrink: 0,
   },
   logIconText: {
-    fontSize: 10,
-    fontWeight: '700',
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.bold,
   },
   logType: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.bold,
     width: 70,
     flexShrink: 0,
   },
   logMessage: {
-    color: '#b5b5b5',
-    fontSize: 11,
-    fontWeight: '400',
+    color: Colors.neutral.gray400,
+    fontSize: FONT_SIZE.xs,
+    fontWeight: FONT_WEIGHT.regular,
     flex: 1,
   },
   logsFooter: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
-    backgroundColor: '#000',
+    borderTopColor: Colors.borders.lighter,
+    backgroundColor: Colors.neutral.black,
   },
   logsFooterText: {
-    color: '#555',
-    fontSize: 12,
-    fontWeight: '400',
+    color: Colors.neutral.gray700,
+    fontSize: FONT_SIZE.sm,
+    fontWeight: FONT_WEIGHT.regular,
   },
 });

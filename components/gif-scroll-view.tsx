@@ -1,5 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { SPACING } from '@/constants/dimensions';
 
 type Props = PropsWithChildren<{
   title?: ReactNode;
@@ -43,8 +44,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 32,
-    gap: 16,
+    padding: SPACING.xxxl,
+    gap: SPACING.md,
     overflow: 'hidden',
     backgroundColor: 'transparent',
   },
