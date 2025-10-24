@@ -5,6 +5,17 @@ interface Position {
   change7d?: string;
 }
 
+export interface CurrentToken {
+  symbol: string;
+  address: string;
+  allocation: number;
+  riskLevel: 'Low Risk' | 'Medium Risk' | 'High Risk';
+  price?: number;
+  liquidity?: number;
+  marketCap?: number;
+  volume24h?: number;
+}
+
 export interface PerformanceDataPoint {
   timestamp: string;
   value: number;
@@ -27,6 +38,7 @@ export interface Agent {
   role: string;
   avatar?: string;
   topPositions: Position[];
+  currentTokens: CurrentToken[];
   change24h: string;
   change7d: string;
   protectionLevel: ('Degen' | 'Moderate' | 'Guarded')[];

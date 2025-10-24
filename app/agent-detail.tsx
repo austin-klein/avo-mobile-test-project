@@ -1,5 +1,6 @@
 import { AgentHeader } from '@/app/components/AgentHeader';
 import { AgentLogsTab } from '@/app/components/AgentLogsTab';
+import { CurrentTokensTab } from '@/app/components/CurrentTokensTab';
 import { ExpandedLogsModal } from '@/app/components/ExpandedLogsModal';
 import { PerformanceGraph } from '@/app/components/PerformanceGraph';
 import { ProfileTab } from '@/app/components/ProfileTab';
@@ -95,6 +96,13 @@ export default function AgentDetailScreen() {
             protectionLevel={selectedProtectionLevel || agent.protectionLevel[0]}
           />
         )}
+
+        {/* Current Tokens Section */}
+        {agent.currentTokens && agent.currentTokens.length > 0 && (
+          <View style={styles.currentTokensSection}>
+            <CurrentTokensTab tokens={agent.currentTokens} />
+          </View>
+        )}
       </ScrollView>
       <TradingModal
         visible={showTradingModal}
@@ -189,5 +197,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     textAlign: 'center',
+  },
+  currentTokensSection: {
+    marginTop: 16,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    overflow: 'hidden',
   },
 });
